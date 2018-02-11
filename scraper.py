@@ -25,7 +25,7 @@ def getHtml(locale):
     else:
         print("Fetching", url, "failed.")
         return
-        
+
 def getNews(newsId, url):
     result = requests.get(url)
     if result.status_code != 200:
@@ -50,7 +50,7 @@ news = {}
 
 for locale in LOCALES:
     soup = BeautifulSoup(getHtml(locale), 'html.parser')
-    
+
     if soup == None:
         continue
 
@@ -58,7 +58,7 @@ for locale in LOCALES:
     links = soup.find_all('a', href=True)
     for link in links:
         linkUrl = link['href']
-        pattern = re.compile(".*?\/" + locale + "\/news\/\d.*?")
+        pattern = re.compile(".*?\/" + locale + "\/news\/\d.*?\/")
         if pattern.match(linkUrl):
             newsId = re.search('news\/(\d+)\/', linkUrl).group(1)
             news[locale][newsId] = getNews(newsId, BASE_URL.format(linkUrl))
